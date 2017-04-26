@@ -45,7 +45,8 @@ public class NoteTest
 		assertTrue(note.equals(ref));
 
 
-		Note other = new Note("message2");
+		Note other = new Note("message");
+		other.setTimeStamp(java.time.LocalDateTime.now().plusDays(5));
 
 		assertFalse(other.equals(note));
         }
@@ -55,29 +56,12 @@ public class NoteTest
 	 */
 	public void testHashSetElement()
 	{
-		ArrayList<Note> arr = new ArrayList<Note>();
-		arr.add(new Note("m1"));
-		arr.add(new Note("m2"));
-		Note note = new Note("m3");
-		arr.add(note);
-		arr.add(note);
-		arr.add(new Note(new String("m1")));
+		Note first = new Note("msg");
+		Note second = new Note("msg",
+			java.time.LocalDateTime.now().plusHours(1));
 
-		int arr_size = arr.size();
-		int unique_size = arr_size - 1;
-
-		for(int i = 0; i < 30; ++i) {
-			HashSet<Note> set = new HashSet<Note>();
-
-			assertTrue(set.add(arr.get(0)));
-			assertTrue(set.add(arr.get(1)));
-			assertTrue(set.add(arr.get(2)));
-			assertFalse(set.add(arr.get(3)));
-			assertTrue(set.add(arr.get(4)));
-
-			assertTrue(set.size() != arr_size);
-			assertTrue(set.size() == unique_size);
-		}
+		int check = first.compareTo(second);
+		assertTrue(check == -1);
 	}
 }
 

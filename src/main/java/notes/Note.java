@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 public class Note implements Comparable<Note>, Serializable
 {
+	private static final long serialVersionUID = 1;
 	private String text;
 	private LocalDateTime timeStamp;
 	private HashSet<String> tags;
@@ -50,54 +51,6 @@ public class Note implements Comparable<Note>, Serializable
 	public void setTimeStamp(LocalDateTime time)
 	{
 		this.timeStamp = time;
-	}
-
-	@Override
-	public boolean equals(Object obj)
-	{
-		if(obj == null) {
-			return false;
-		}
-
-		if(!Note.class.isAssignableFrom(obj.getClass())) {
-			return false;
-		}
-
-
-		final Note other = (Note)obj;
-
-		if((this.text == null) ?
-			(other.text != null) :
-			!this.text.equals(other.text))
-		{
-			return false;
-		}
-
-		if((this.timeStamp == null) ?
-			(other.timeStamp != null) :
-			!this.timeStamp.equals(other.timeStamp))
-		{
-			return false;
-		}
-
-		if((this.tags == null) ?
-			(other.tags != null) :
-			!this.tags.equals(other.tags))
-		{
-			return false;
-		}
-
-		return true;
-	}
-
-	@Override
-	public int hashCode()
-	{
-		int hash = 3;
-		hash += 53 * hash + (this.text != null ? this.text.hashCode() : 0);
-		hash += 53 * hash + (this.timeStamp != null ? this.timeStamp.hashCode() : 0);
-		hash += 53 * hash + (this.tags != null ? this.tags.hashCode() : 0);
-		return hash;
 	}
 
 	@Override
