@@ -53,6 +53,31 @@ public class Note implements Comparable<Note>, Serializable
 		this.timeStamp = time;
 	}
 
+	public boolean isTagged(String tag)
+	{
+		if(tag.charAt(0) == '#') {
+			tag = tag.substring(1);
+		}
+
+		return this.tags.contains(tag);
+	}
+
+	@Override
+	public String toString()
+	{
+		String timeStampStr = this.timeStamp.format(
+			DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+
+		StringBuilder builder = new StringBuilder(
+			timeStampStr.length() + this.text.length() + 2);
+
+		builder.append(timeStampStr);
+		builder.append("\n\t");
+		builder.append(this.text);
+
+		return builder.toString();
+	}
+
 	@Override
 	public int compareTo(Note other)
 	{

@@ -12,6 +12,16 @@ import java.util.HashSet;
 public class NoteTest
         extends TestCase
 {
+	private Note note;
+
+	@Override
+	public void setUp()
+	{
+		this.note = new Note(
+			"#tag1 # this #tag1 is #tag2 message #tag3 #i",
+			java.time.LocalDateTime.now());
+	}
+
         /**
          * Create the test case
          *
@@ -35,26 +45,25 @@ public class NoteTest
          */
         public void testEquals()
         {
-		Note note = new Note("message");
-		Note ref = note;
+		Note ref = this.note;
 
-		assertTrue(note.equals(ref));
+		assertTrue(this.note.equals(ref));
 
 		ref.setTimeStamp(java.time.LocalDateTime.now());
 
-		assertTrue(note.equals(ref));
+		assertTrue(this.note.equals(ref));
 
 
 		Note other = new Note("message");
 		other.setTimeStamp(java.time.LocalDateTime.now().plusDays(5));
 
-		assertFalse(other.equals(note));
+		assertFalse(other.equals(this.note));
         }
 
 	/**
-	 * test Note class as a hashSet Element
+	 * test Note class compare
 	 */
-	public void testHashSetElement()
+	public void testCompareTo()
 	{
 		Note first = new Note("msg");
 		Note second = new Note("msg",
@@ -62,6 +71,30 @@ public class NoteTest
 
 		int check = first.compareTo(second);
 		assertTrue(check == -1);
+	}
+
+	/**
+	 * test tags
+	 */
+	public void testTags()
+	{
+		String tag1 = "#tag1";
+		String tag2 = "#tag2";
+		String tag3 = "#tag3";
+
+		StringBuilder builder = new StringBuilder();
+		builder.append("this ");
+		builder.append(tag1);
+		builder.append(" is a");
+		builder.append(tag2);
+		builder.append(" message ");
+		builder.append(tag3);
+
+		this.note = new Note(builder.toString());
+
+		assertTrue(this.note.isTagged(tag1));
+		assertTrue(this.note.isTagged(tag2));
+		assertTrue(this.note.isTagged(tag3));
 	}
 }
 
