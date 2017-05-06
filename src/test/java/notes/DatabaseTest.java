@@ -9,9 +9,8 @@ import java.nio.file.Path;
 import java.nio.file.Files;
 import java.io.IOException;
 
-/**
- * Unit test for simple App.
- */
+import java.time.LocalDateTime;
+
 public class DatabaseTest
 {
 	private static Path path;
@@ -33,4 +32,22 @@ public class DatabaseTest
 		db.close();
 		Assert.assertTrue(true);
         }
+
+	@Test
+	public void testInsert() throws SQLException, IOException
+	{
+		Database db = null;
+		try {
+			db = new Database(path);
+
+			db.insert(LocalDateTime.now().minusHours(2), "first");
+			db.insert(LocalDateTime.now().minusHours(1), "second");
+			db.insert(LocalDateTime.now(), "third");
+
+			int count = db.count();
+			Assert.assertTrue(count == 3);
+		} finally {
+			db.close();
+		}
+	}
 }
