@@ -153,4 +153,17 @@ public ArrayList<Note> select(LocalDateTime start,
 	}
 }
 
+public boolean delete(int id) throws SQLException
+{
+	try {
+		PreparedStatement pst = con.prepareStatement(
+			"delete from notes where id = ?");
+		pst.setInt(1, id);
+
+		return pst.executeUpdate() > 0;
+	} catch(SQLException e) {
+		throw new SQLException("failed to remove note", e);
+	}
+}
+
 }

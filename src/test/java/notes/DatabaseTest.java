@@ -81,5 +81,15 @@ public class DatabaseTest
 		notes = database.select(firstTimeStamp, firstTimeStamp);
 		Assert.assertTrue(notes.size() == 0);
 	}
+
+	@Test
+	public void testDelete() throws SQLException
+	{
+		database.insert(LocalDateTime.now(), "fourth");
+
+		Assert.assertTrue(database.count() == 4);
+		Assert.assertTrue(database.delete(4));
+		Assert.assertTrue(database.count() == 3);
+	}
 }
 
