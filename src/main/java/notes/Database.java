@@ -17,6 +17,7 @@ import java.io.OutputStream;
 import java.io.IOException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Database
 {
@@ -121,6 +122,33 @@ public int count()
 		return count;
 	} catch(SQLException e) {
 		return -1;
+	}
+}
+
+public ArrayList<Note> find(LocalDateTime start,
+				LocalDateTime end) throws SQLException
+{
+	try {
+		PreparedStatement pst = con.prepareStatement(
+			"select * from notes" +
+			" where time_stamp >= ? and time_stamp < ?");
+		pst.setTimestamp(1, Timestamp.valueOf(start));
+		pst.setTimestamp(2, Timestamp.valueOf(end));
+
+		ResultSet result = pst.executeQuery();
+
+		ArrayList<Note> notes = new ArrayList<Note>();
+		while(result.next()) {
+			LocalDateTime ts = result.getTimestamp(
+				"time_stamp").toLocalDateTime();
+			String text = result.getString("msg");
+			notes.add(new Note(text, ts));
+		}
+
+		return notes;
+
+	} catch(SQLException e) {
+		throw new SQLException("failed to find notes", e);
 	}
 }
 

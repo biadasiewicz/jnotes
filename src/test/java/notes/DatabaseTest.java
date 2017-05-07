@@ -10,15 +10,33 @@ import java.nio.file.Files;
 import java.io.IOException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class DatabaseTest
 {
 	private static Path path;
+	private static Database database;
+	private static LocalDateTime firstTimeStamp;
+	private static LocalDateTime secondTimeStamp;
+	private static LocalDateTime thirdTimeStamp;
 
 	@BeforeClass
-	public static void initPath() throws IOException
+	public static void initPath() throws IOException, SQLException
 	{
 		path = Files.createTempDirectory("DatabaseTest");
+		database = new Database(path);
+		thirdTimeStamp = LocalDateTime.now();
+		secondTimeStamp = thirdTimeStamp.minusHours(1);
+		firstTimeStamp = thirdTimeStamp.minusHours(2);
+
+		insert();
+	}
+
+	private static void insert() throws SQLException
+	{
+		database.insert(firstTimeStamp, "first");
+		database.insert(secondTimeStamp, "second");
+		database.insert(thirdTimeStamp, "third");
 	}
 
 	@Test
@@ -31,23 +49,37 @@ public class DatabaseTest
 		db = new Database(path);
 		db.close();
 		Assert.assertTrue(true);
+
+		database = new Database(path);
         }
 
 	@Test
 	public void testInsert() throws SQLException, IOException
 	{
-		Database db = null;
-		try {
-			db = new Database(path);
+		int count = database.count();
+		Assert.assertTrue(count == 3);
+	}
 
-			db.insert(LocalDateTime.now().minusHours(2), "first");
-			db.insert(LocalDateTime.now().minusHours(1), "second");
-			db.insert(LocalDateTime.now(), "third");
+	@Test
+	public void testFind() throws SQLException
+	{
+		ArrayList<Note> notes = database.find(firstTimeStamp,
+			thirdTimeStamp.plusHours(1));
 
-			int count = db.count();
-			Assert.assertTrue(count == 3);
-		} finally {
-			db.close();
-		}
+		Assert.assertTrue("should find all notes", notes.size() == 3);
+
+		notes = database.find(firstTimeStamp, thirdTimeStamp);
+		Assert.assertTrue(notes.size() == 2);
+
+		notes = database.find(thirdTimeStamp.plusHours(123),
+			thirdTimeStamp.plusHours(124));
+		Assert.assertTrue(notes.size() == 0);
+
+		notes = database.find(secondTimeStamp, firstTimeStamp);
+		Assert.assertTrue(notes.size() == 0);
+
+		notes = database.find(firstTimeStamp, firstTimeStamp);
+		Assert.assertTrue(notes.size() == 0);
 	}
 }
+
