@@ -61,24 +61,24 @@ public class DatabaseTest
 	}
 
 	@Test
-	public void testFind() throws SQLException
+	public void testSelect() throws SQLException
 	{
-		ArrayList<Note> notes = database.find(firstTimeStamp,
+		ArrayList<Note> notes = database.select(firstTimeStamp,
 			thirdTimeStamp.plusHours(1));
 
-		Assert.assertTrue("should find all notes", notes.size() == 3);
+		Assert.assertTrue("should select all notes", notes.size() == 3);
 
-		notes = database.find(firstTimeStamp, thirdTimeStamp);
+		notes = database.select(firstTimeStamp, thirdTimeStamp);
 		Assert.assertTrue(notes.size() == 2);
 
-		notes = database.find(thirdTimeStamp.plusHours(123),
+		notes = database.select(thirdTimeStamp.plusHours(123),
 			thirdTimeStamp.plusHours(124));
 		Assert.assertTrue(notes.size() == 0);
 
-		notes = database.find(secondTimeStamp, firstTimeStamp);
+		notes = database.select(secondTimeStamp, firstTimeStamp);
 		Assert.assertTrue(notes.size() == 0);
 
-		notes = database.find(firstTimeStamp, firstTimeStamp);
+		notes = database.select(firstTimeStamp, firstTimeStamp);
 		Assert.assertTrue(notes.size() == 0);
 	}
 }

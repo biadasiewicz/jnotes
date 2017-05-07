@@ -99,7 +99,7 @@ public class NoteTest
 
 	public void testPrint()
 	{
-		System.out.println(this.note);
+		//System.out.println(this.note);
 	}
 }
 

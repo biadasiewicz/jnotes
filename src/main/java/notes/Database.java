@@ -125,7 +125,7 @@ public int count()
 	}
 }
 
-public ArrayList<Note> find(LocalDateTime start,
+public ArrayList<Note> select(LocalDateTime start,
 				LocalDateTime end) throws SQLException
 {
 	try {
