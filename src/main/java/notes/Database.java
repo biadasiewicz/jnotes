@@ -149,6 +149,31 @@ public ArrayList<Note> select(LocalDateTime start,
 		return notes;
 
 	} catch(SQLException e) {
+		throw new SQLException(
+			"failed to select notes from date range", e);
+	}
+}
+
+public ArrayList<Note> select() throws SQLException
+{
+	try {
+		PreparedStatement pst = con.prepareStatement(
+			"select * from notes");
+
+		ResultSet result = pst.executeQuery();
+
+		ArrayList<Note> notes = new ArrayList<Note>();
+		while(result.next()) {
+			int id = result.getInt("id");
+			LocalDateTime ts = result.getTimestamp(
+				"time_stamp").toLocalDateTime();
+			String text = result.getString("msg");
+			notes.add(new Note(id, text, ts));
+		}
+
+		return notes;
+
+	} catch(SQLException e) {
 		throw new SQLException("failed to find notes", e);
 	}
 }

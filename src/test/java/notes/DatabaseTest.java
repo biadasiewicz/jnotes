@@ -83,6 +83,14 @@ public class DatabaseTest
 	}
 
 	@Test
+	public void testSelectAll() throws SQLException
+	{
+		ArrayList<Note> notes = database.select();
+
+		Assert.assertTrue(notes.size() == database.count());
+	}
+
+	@Test
 	public void testDelete() throws SQLException
 	{
 		database.insert(LocalDateTime.now(), "fourth");
