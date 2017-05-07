@@ -5,29 +5,24 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import java.io.Serializable;
 
-public class Note implements Comparable<Note>, Serializable
+public class Note implements Comparable<Note>
 {
-	private static final long serialVersionUID = 1;
 	private String text;
 	private LocalDateTime timeStamp;
 	private HashSet<String> tags;
+	private int id;
 
-	public Note()
+	public Note(int id, String text)
 	{
-		this(null, null);
+		this(id, text, LocalDateTime.now());
 	}
 
-	public Note(String text)
-	{
-		this(text, LocalDateTime.now());
-	}
-
-	public Note(String text, LocalDateTime timeStamp)
+	public Note(int id, String text, LocalDateTime timeStamp)
 	{
 		setText(text);
 		setTimeStamp(timeStamp);
+		this.id = id;
 	}
 
 	public void setText(String text)
@@ -68,9 +63,15 @@ public class Note implements Comparable<Note>, Serializable
 		String timeStampStr = this.timeStamp.format(
 			DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
 
-		StringBuilder builder = new StringBuilder(
-			timeStampStr.length() + this.text.length() + 2);
+		Integer integer = new Integer(this.id);
+		String idStr = integer.toString();
 
+		StringBuilder builder = new StringBuilder(
+			idStr.length() + 2 + timeStampStr.length() +
+			this.text.length() + 2);
+
+		builder.append(idStr);
+		builder.append(") ");
 		builder.append(timeStampStr);
 		builder.append("\n\t");
 		builder.append(this.text);
@@ -82,5 +83,10 @@ public class Note implements Comparable<Note>, Serializable
 	public int compareTo(Note other)
 	{
 		return this.timeStamp.compareTo(other.timeStamp);
+	}
+
+	public int compareTo(int id)
+	{
+		return Integer.compare(this.id, id);
 	}
 }

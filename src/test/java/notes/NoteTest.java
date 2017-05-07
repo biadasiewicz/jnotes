@@ -17,7 +17,7 @@ public class NoteTest
 	@Override
 	public void setUp()
 	{
-		this.note = new Note(
+		this.note = new Note(1,
 			"#tag1 # this #tag1 is #tag2 message #tag3 #i",
 			java.time.LocalDateTime.now());
 	}
@@ -54,7 +54,7 @@ public class NoteTest
 		assertTrue(this.note.equals(ref));
 
 
-		Note other = new Note("message");
+		Note other = new Note(2, "message");
 		other.setTimeStamp(java.time.LocalDateTime.now().plusDays(5));
 
 		assertFalse(other.equals(this.note));
@@ -65,8 +65,8 @@ public class NoteTest
 	 */
 	public void testCompareTo()
 	{
-		Note first = new Note("msg");
-		Note second = new Note("msg",
+		Note first = new Note(1, "msg");
+		Note second = new Note(2, "msg",
 			java.time.LocalDateTime.now().plusHours(1));
 
 		int check = first.compareTo(second);
@@ -90,11 +90,16 @@ public class NoteTest
 		builder.append(" message ");
 		builder.append(tag3);
 
-		this.note = new Note(builder.toString());
+		this.note = new Note(123, builder.toString());
 
 		assertTrue(this.note.isTagged(tag1));
 		assertTrue(this.note.isTagged(tag2));
 		assertTrue(this.note.isTagged(tag3));
+	}
+
+	public void testPrint()
+	{
+		System.out.println(this.note);
 	}
 }
 
