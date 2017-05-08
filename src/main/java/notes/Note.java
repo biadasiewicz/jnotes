@@ -25,6 +25,11 @@ public class Note implements Comparable<Note>
 		this.id = id;
 	}
 
+	public String getText()
+	{
+		return this.text;
+	}
+
 	public void setText(String text)
 	{
 		Pattern pattern = Pattern.compile("#(\\S+)");
@@ -41,6 +46,11 @@ public class Note implements Comparable<Note>
 		}
 
 		this.text = text;
+	}
+
+	public LocalDateTime getTimeStamp()
+	{
+		return this.timeStamp;
 	}
 
 	public void setTimeStamp(LocalDateTime time)

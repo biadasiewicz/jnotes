@@ -174,7 +174,31 @@ public ArrayList<Note> select() throws SQLException
 		return notes;
 
 	} catch(SQLException e) {
-		throw new SQLException("failed to find notes", e);
+		throw new SQLException("failed to query all notes", e);
+	}
+}
+
+public Note select(int id) throws SQLException
+{
+	try {
+		PreparedStatement pst = con.prepareStatement(
+			"select * from notes where id = ?");
+		pst.setInt(1, id);
+
+		Note note = null;
+
+		ResultSet result = pst.executeQuery();
+		if(result.next()) {
+			note = new Note(
+				result.getInt("id"),
+				result.getString("msg"),
+				result.getTimestamp("time_stamp").toLocalDateTime());
+		}
+
+		return note;
+
+	} catch(SQLException e) {
+		throw new SQLException("failed to query note", e);
 	}
 }
 
@@ -188,6 +212,25 @@ public boolean delete(int id) throws SQLException
 		return pst.executeUpdate() > 0;
 	} catch(SQLException e) {
 		throw new SQLException("failed to remove note", e);
+	}
+}
+
+public boolean update(int id, LocalDateTime timeStamp, String text) throws SQLException
+{
+	try {
+		PreparedStatement pst = con.prepareStatement(
+			"update notes " +
+			"set time_stamp = ?, msg = ?" +
+			" where id = ?");
+
+		pst.setTimestamp(1, Timestamp.valueOf(timeStamp));
+		pst.setString(2, text);
+		pst.setInt(3, id);
+
+		return pst.executeUpdate() > 0;
+
+	} catch(SQLException e) {
+		throw new SQLException("failed to update note", e);
 	}
 }
 

@@ -91,6 +91,24 @@ public class DatabaseTest
 	}
 
 	@Test
+	public void testSelectById() throws SQLException
+	{
+		Note note = database.select(1);
+
+		Assert.assertTrue(note != null);
+		Assert.assertTrue(note.getText().equals("first"));
+
+		note = database.select(3);
+
+		Assert.assertTrue(note != null);
+		Assert.assertTrue(note.getText().equals("third"));
+
+		note = database.select(4);
+
+		Assert.assertTrue(note == null);
+	}
+
+	@Test
 	public void testDelete() throws SQLException
 	{
 		database.insert(LocalDateTime.now(), "fourth");
@@ -98,6 +116,22 @@ public class DatabaseTest
 		Assert.assertTrue(database.count() == 4);
 		Assert.assertTrue(database.delete(4));
 		Assert.assertTrue(database.count() == 3);
+	}
+
+	@Test
+	public void testUpdate() throws SQLException
+	{
+		Note note = database.select(1);
+
+		Assert.assertTrue(database.update(1, note.getTimeStamp(), "text changed"));
+		Note updatedNote = database.select(1);
+
+		Assert.assertTrue("must be different objects", note != updatedNote);
+
+		Assert.assertTrue(note.getTimeStamp().equals(updatedNote.getTimeStamp()));
+		Assert.assertFalse(note.getText().equals(updatedNote.getText()));
+
+		Assert.assertTrue(database.update(1, note.getTimeStamp(), "first"));
 	}
 }
 
