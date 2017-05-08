@@ -131,7 +131,23 @@ public class DatabaseTest
 		Assert.assertTrue(note.getTimeStamp().equals(updatedNote.getTimeStamp()));
 		Assert.assertFalse(note.getText().equals(updatedNote.getText()));
 
-		Assert.assertTrue(database.update(1, note.getTimeStamp(), "first"));
+		Assert.assertTrue(database.update(1, note.getTimeStamp(), note.getText()));
+	}
+
+	@Test
+	public void testUpdateText() throws SQLException
+	{
+		Note note = database.select(1);
+
+		Assert.assertTrue(database.update(1, "text changed"));
+
+		Note updatedNote = database.select(1);
+
+		Assert.assertTrue("must be different objects", note != updatedNote);
+
+		Assert.assertFalse(note.getText().equals(updatedNote.getText()));
+
+		Assert.assertTrue(database.update(1, note.getText()));
 	}
 }
 

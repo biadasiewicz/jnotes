@@ -234,4 +234,21 @@ public boolean update(int id, LocalDateTime timeStamp, String text) throws SQLEx
 	}
 }
 
+public boolean update(int id, String text) throws SQLException
+{
+	try {
+		PreparedStatement pst = con.prepareStatement(
+			"update notes " +
+			"set msg = ? " +
+			"where id = ?");
+
+		pst.setString(1, text);
+		pst.setInt(2, id);
+
+		return pst.executeUpdate() > 0;
+	} catch(SQLException e) {
+		throw new SQLException("failed to update note text", e);
+	}
+}
+
 }
