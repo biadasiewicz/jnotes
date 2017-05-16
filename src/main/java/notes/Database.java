@@ -102,7 +102,6 @@ public void insert(LocalDateTime timeStamp, String text) throws SQLException
 
 		pst.executeUpdate();
 
-		con.commit();
 	} catch(SQLException e) {
 		throw new SQLException("failed to write new note", e);
 	}

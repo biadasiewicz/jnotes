@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import org.apache.commons.cli.*;
+
 public class DatabaseTest
 {
 	private static Path path;
@@ -19,6 +21,7 @@ public class DatabaseTest
 	private static LocalDateTime firstTimeStamp;
 	private static LocalDateTime secondTimeStamp;
 	private static LocalDateTime thirdTimeStamp;
+	private static Application app;
 
 	@BeforeClass
 	public static void initPath() throws IOException, SQLException
@@ -30,6 +33,7 @@ public class DatabaseTest
 		firstTimeStamp = thirdTimeStamp.minusHours(2);
 
 		insert();
+
 	}
 
 	private static void insert() throws SQLException
@@ -148,6 +152,12 @@ public class DatabaseTest
 		Assert.assertFalse(note.getText().equals(updatedNote.getText()));
 
 		Assert.assertTrue(database.update(1, note.getText()));
+	}
+
+	@Test
+	public void testApplication() throws SQLException, ParseException
+	{
+		Application app = new Application(database);
 	}
 }
 
